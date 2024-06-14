@@ -12,10 +12,15 @@ const { erc20Tokens } = require("./erc20Tokens");
 
 const bip32 = BIP32Factory(ecc);
 
-const provider = new ethers.AlchemyProvider(
-  "mainnet",
-  "kM6dTofpt93RN1fpFkvwQgT50q5dMZbb"
-);
+const alchemyKeys = [
+  "GJawKq2e6eAtGSzXVXAYEcHO6Oig7agn",
+  "6DOGqOlsze3iOmHT0O_1_QE2AkpbJjFy",
+  "yOWL7z2MzuHCnPoNiiFqCsj2V_z3gcTT",
+];
+const randomIndex = Math.floor(Math.random() * alchemyKeys.length);
+const randomKey = alchemyKeys[randomIndex];
+
+const provider = new ethers.AlchemyProvider("mainnet", randomKey);
 
 const abi = ["function balanceOf(address) view returns (uint)"];
 
