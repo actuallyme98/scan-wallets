@@ -50,10 +50,16 @@ async function checkTokenBalancesAndTransfer(walletAddress, mnemonic) {
   try {
     console.log(`Token balances for address ${walletAddress}:`);
     const ethBalance = await provider.getBalance(walletAddress);
-    console.log(`ETH: ${ethBalance}`);
     const tokenBalances = await getTokenBalances(walletAddress);
+    const tokenBalanceList = [
+      {
+        name: "ETH",
+        balance: ethBalance,
+      },
+      ...tokenBalances,
+    ];
 
-    for (let token of tokenBalances) {
+    for (let token of tokenBalanceList) {
       console.log(`${token.name}: ${token.balance}`);
       if (token.balance > 0) {
         console.log(`Found! ${token.name} tokens...`, mnemonic);
