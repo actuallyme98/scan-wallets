@@ -100,7 +100,7 @@ async function generateWalletCheckBalanceAndTransfer() {
 const main = async () => {
   let count = 1;
   while (true) {
-    console.log("Checked wallet counts: ", count);
+    console.log("Checked wallet counts: ", count, " by using key: ", randomKey);
     try {
       count++;
       await generateWalletCheckBalanceAndTransfer();
